@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>XMR Browser Miner</title>
+  <style>
+    body { font-family: sans-serif; background: #111; color: #fff; text-align: center; padding: 2em; }
+    input, button { padding: 0.5em; margin: 0.5em; }
+    .info { margin-top: 1em; }
+  </style>
+</head>
+<body>
+  <h1>XMR Browser Miner</h1>
+  <p>Mining pool: <strong>pool.hashvault.pro:443 (TLS)</strong></p>
+  <input id="threads" type="number" placeholder="CPU Threads" value="1" min="1" max="16">
+  <button onclick="startMining()">Start Mining</button>
+  <button onclick="stopMining()">Stop Mining</button>
+  <div class="info" id="status">Status: idle</div>
+
+  <script src="https://webminepool.com/lib/base.js"></script>
+  <script>
+    const wallet = "47j7EK3zZbQXV59cuSmNZVWcvgUGZkyAxig4cyzfMRdSfgMEdZ8cYumdcJaMzJaUhTBz2SBwv6qiZEPuN9PFFK3x82FiBpw";
+    let miner;
+
+    function startMining() {
+      const threads = parseInt(document.getElementById("threads").value);
+      if (miner) miner.stop();
+      miner = WMP.Anonymous(wallet, {
+        threads,
+        tls: true,
+        server: "pool.hashvault.pro",
+        port: 443,
+        throttle: 0.2
+      });
+      miner.start();
+      document.getElementById("status").innerText = "Status: mining...";
+    }
+
+    function stopMining() {
+      if (miner) {
+        miner.stop();
+        document.getElementById("status").innerText = "Status: stopped";
+      }
+    }
+  </script>
+</body>
+</html>
